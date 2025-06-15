@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>你被骗了</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+     <!-- Firebase CDN SDK -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+
+   <!-- Firebase 设置 -->
+  <script>
+    const firebaseConfig = {
+      apiKey: "...",
+      authDomain: "...",
+      databaseURL: "...",
+      projectId: "...",
+      storageBucket: "...",
+      messagingSenderId: "...",
+      appId: "..."
+    };
+    firebase.initializeApp(firebaseConfig);
+  </script>
+
+  <!-- 你的 CSS 和其他内容 -->
+  <style> ... </style>
+</head>
+
+    <link href="https://fonts.googleapis.com/css2?family=ZCOOL+KuaiLe&family=Montserrat:wght@700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            min-height: 100vh;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #a18cd1;
+            font-family: 'Montserrat', 'ZCOOL KuaiLe', 'Segoe UI', 'Arial', sans-serif;
+        }
+        .main {
+            background: #fff;
+            padding: 60px 40px 48px 40px;
+            border-radius: 36px;
+            box-shadow: 0 8px 40px 0 rgba(161,140,209,0.18), 0 1.5px 8px 0 #fff;
+            text-align: center;
+            min-width: 340px;
+            max-width: 90vw;
+            width: 420px;
+            position: relative;
+            transition: box-shadow 0.3s;
+        }
+        .emoji {
+            font-size: 8em;
+            margin-bottom: 18px;
+            animation: bounce 1.2s infinite alternate;
+            filter: drop-shadow(0 4px 16px #e0b3ff88);
+        }
+        @keyframes bounce {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(-16px); }
+        }
+        .title {
+            font-size: 2.1em;
+            font-family: 'ZCOOL KuaiLe', 'Montserrat', Arial, sans-serif;
+            color: #7c3aed;
+            margin-bottom: 18px;
+            letter-spacing: 2px;
+        }
+        .number {
+            font-size: 4.5em;
+            font-weight: bold;
+            color: #c82333;
+            font-family: 'Montserrat', 'ZCOOL KuaiLe', cursive;
+            letter-spacing: 2px;
+            display: inline-block;
+            margin: 0 8px;
+            transition: transform 0.3s cubic-bezier(.68,-0.55,.27,1.55), color 0.3s;
+            text-shadow: 0 2px 12px #e0b3ff55;
+        }
+        .number.animated {
+            transform: scale(1.18) rotate(-8deg);
+            color: #7c3aed;
+        }
+        .desc {
+            font-size: 1.2em;
+            color: #444;
+            margin-bottom: 32px;
+            font-family: 'Montserrat', 'ZCOOL KuaiLe', Arial, sans-serif;
+        }
+        .tip {
+            margin-top: 40px;
+            font-size: 1.5em;
+            color: #fff;
+            background: #a18cd1;
+            border-radius: 18px;
+            padding: 18px 32px;
+            box-shadow: 0 2px 12px #a18cd133;
+            font-family: 'ZCOOL KuaiLe', 'Montserrat', Arial, sans-serif;
+            opacity: 0;
+            animation: fadeIn 1s 0.2s forwards;
+        }
+        @keyframes fadeIn {
+            to { opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+    <div class="main" id="main">
+        <div class="emoji">🤡</div>
+        <div class="title">你被骗了！</div>
+        <div class="desc">你是第 <span class="number" id="count"></span> 个被骗的</div>
+    </div>
+    <script>
+        // 数字动画效果
+        const countEl = document.getElementById('count');
+        countEl.classList.add('animated');
+        setTimeout(() => countEl.classList.remove('animated'), 600);
+        // 3秒后跳转到提示页面
+        setTimeout(function() {
+            document.body.innerHTML = `<div style=\"display:flex;align-items:center;justify-content:center;height:100vh;background:#a18cd1;\"><img src=\"image.jpg\" alt=\"警示图片\" class=\"fancy-flash\" style=\"max-width:90vw;max-height:90vh;width:1080px;height:763px;border-radius:18px;box-shadow:0 2px 24px #a18cd1cc,0 8px 40px #fff8;\"></div>`;
+        }, 3000);
+        /* 添加图片闪烁动画样式 */
+        const style = document.createElement('style');
+        style.innerHTML = `
+        .fancy-flash {
+            animation: flash-glow 1.2s infinite alternate;
+        }
+        @keyframes flash-glow {
+            0% { filter: brightness(1) drop-shadow(0 0 24px #fff6) drop-shadow(0 0 8px #a18cd1cc); }
+            100% { filter: brightness(1.25) drop-shadow(0 0 48px #fff) drop-shadow(0 0 24px #a18cd1); }
+        }
+        `;
+        document.head.appendChild(style);
+    </script>
+
+    <!-- 用于全局计数的 Firebase 代码 -->
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-app.js";
+  import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-analytics.js";
+  import { getDatabase, ref, runTransaction, onValue } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-database.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyDVUlZz32fhubPgS8gqt7huK4BHT9XZSyU",
+    authDomain: "cheated-counter-a3319.firebaseapp.com",
+    projectId: "cheated-counter-a3319",
+    storageBucket: "cheated-counter-a3319.firebasestorage.app",
+    messagingSenderId: "883816844135",
+    appId: "1:883816844135:web:2e6bd3a4ceb4d0fbbefdc2",
+    measurementId: "G-NCLLLFKRHE",
+    databaseURL: "https://cheated-counter-a3319-default-rtdb.asia-southeast1.firebasedatabase.app"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const analytics = getAnalytics(app);
+  const db = getDatabase(app);
+
+  // 检查是否已标记访问过
+  const hasVisited = localStorage.getItem("cheated_visited");
+
+  if (!hasVisited) {
+    const totalRef = ref(db, 'total_count');
+    runTransaction(totalRef, (current) => {
+      return (current || 0) + 1;
+    }).then((result) => {
+      const number = result.snapshot.val();
+      document.getElementById("count").textContent = number;
+      localStorage.setItem("cheated_visited", "yes");
+    });
+  } else {
+    const totalRef = ref(db, 'total_count');
+    onValue(totalRef, (snapshot) => {
+      document.getElementById("count").textContent = snapshot.val();
+    });
+  }
+</script>
+</body>
+</html>
